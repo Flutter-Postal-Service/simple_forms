@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:simple_forms/models/app_form_state.dart';
 
-class InputForm extends HookWidget {
-  const InputForm({
+class FormInput extends HookWidget {
+  const FormInput({
     required this.formState,
     required this.formStateKey,
     required this.labelText,
@@ -20,7 +20,8 @@ class InputForm extends HookWidget {
     this.focusBorderColor = const Color(0xFF000000),
     this.obscureIconColor,
     this.onChanged,
-  });
+    Key? key,
+  }) : super(key: key);
 
   final AppFormState formState;
   final String formStateKey;
@@ -48,7 +49,8 @@ class InputForm extends HookWidget {
       builder: (context, value, child) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           controller.text = formState[formStateKey].toString();
-          controller.selection = TextSelection.fromPosition(TextPosition(offset: controller.text.length));
+          controller.selection = TextSelection.fromPosition(
+              TextPosition(offset: controller.text.length));
         });
         return TextFormField(
           controller: controller,
@@ -67,7 +69,9 @@ class InputForm extends HookWidget {
                       toggleHidePassword.value = !toggleHidePassword.value;
                     },
                     icon: Icon(
-                      toggleHidePassword.value ? Icons.visibility : Icons.visibility_off,
+                      toggleHidePassword.value
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                       color: obscureIconColor,
                     ),
                   )
