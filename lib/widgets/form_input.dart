@@ -16,29 +16,45 @@ class FormInput extends HookWidget {
     this.maxLines = 1,
     this.readOnly,
     this.obscureText = false,
-    this.errorColor = const Color(0xFFFFFFFF),
+    this.errorColor = Colors.red,
     this.focusBorderColor = const Color(0xFF000000),
     this.obscureIconColor,
     this.onChanged,
+    this.prefixIcon,
+    this.fontSize,
+    this.textStyle,
+    this.contentPadding,
+    this.isCollapsed = false,
+    this.isDense,
+    this.textAlignVertical,
     Key? key,
   }) : super(key: key);
 
   final AppFormState formState;
   final String formStateKey;
 
+  final bool? isDense;
   final int maxLines;
   final bool? readOnly;
   final String labelText;
   final bool obscureText;
-  final String? Function(String? val)? validator;
+  final double? fontSize;
+  final bool isCollapsed;
+  final Widget? prefixIcon;
+  final TextStyle? textStyle;
+  final EdgeInsets? contentPadding;
   final TextInputType textInputType;
   final Iterable<String>? autofillHints;
+  final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
   final List<TextInputFormatter> inputFormatters;
-  final Function(String? val)? onChanged;
-  final Color? obscureIconColor;
+
   final Color errorColor;
+  final Color? obscureIconColor;
   final Color focusBorderColor;
+
+  final Function(String? val)? onChanged;
+  final String? Function(String? val)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +66,12 @@ class FormInput extends HookWidget {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           controller.text = formState[formStateKey].toString();
           controller.selection = TextSelection.fromPosition(
-              TextPosition(offset: controller.text.length));
+            TextPosition(
+              offset: controller.text.length,
+            ),
+          );
         });
+
         return TextFormField(
           controller: controller,
           readOnly: readOnly ?? false,
@@ -62,7 +82,16 @@ class FormInput extends HookWidget {
           inputFormatters: inputFormatters,
           textCapitalization: textCapitalization,
           autofillHints: autofillHints,
+          style: textStyle ??
+              TextStyle(
+                fontSize: fontSize,
+              ),
+          textAlignVertical: textAlignVertical,
           decoration: InputDecoration(
+            isDense: isDense,
+            isCollapsed: isCollapsed,
+            contentPadding: contentPadding,
+            prefixIcon: prefixIcon,
             suffixIcon: obscureText
                 ? IconButton(
                     onPressed: () {
